@@ -2,30 +2,34 @@ class Solution {
 public:
     vector<vector<string>> groupAnagrams(vector<string>& strs) {
         vector<vector<string>> result;
+        vector<pair<string, string>> arr;
 
-        for (int i = 0; i < strs.size(); i++) {
+        
+        for (string s : strs) {
+            string sorted_s = s;
+            sort(sorted_s.begin(), sorted_s.end());
+            arr.push_back({sorted_s, s});
+        }
 
-            string key = strs[i];
-            sort(key.begin(), key.end());
+        sort(arr.begin(), arr.end());
 
-            bool placed = false;
+        vector<string> group;
+        group.push_back(arr[0].second);
 
-            for (int k = 0; k < result.size(); k++) {
-                string existingKey = result[k][0];
-                sort(existingKey.begin(), existingKey.end());
-
-                if (existingKey == key) {
-                    result[k].push_back(strs[i]);
-                    placed = true;
-                    break;
-                }
-            }
-
-            if (!placed) {
-                result.push_back({strs[i]});
+        for (int i = 1; i < arr.size(); i++) {
+            if (arr[i].first == arr[i - 1].first) {
+                group.push_back(arr[i].second);
+            } else {
+                result.push_back(group);
+                group.clear();
+                group.push_back(arr[i].second);
             }
         }
 
+        result.push_back(group);
+
         return result;
+    }
+};
     }
 };
